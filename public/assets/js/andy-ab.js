@@ -1,6 +1,6 @@
 "use strict";
 
-var ABTest = function(name) {
+var AndyAB = function(name) {
   this.name = name || "";
   this.cohorts = [];
   this.listeners = [];
@@ -19,17 +19,17 @@ var ABTest = function(name) {
   this.cookiePrefix = "AB";
 }
 
-ABTest.prototype.withCohorts = function(cohorts) {
+AndyAB.prototype.withCohorts = function(cohorts) {
   this.cohorts = cohorts;
   return this;
 }
 
-ABTest.prototype.endingAtTime = function(date) {
+AndyAB.prototype.endingAtTime = function(date) {
   this.endTime = date;
   return this;
 }
 
-ABTest.prototype.sampleCohort = function() {
+AndyAB.prototype.sampleCohort = function() {
   if (this.cohorts.length == 0)
     return;
   var max = this.cohorts.length - 1,
@@ -39,7 +39,7 @@ ABTest.prototype.sampleCohort = function() {
   return this.cohorts[cohort]
 }
 
-ABTest.prototype.enrol = function(callback) {
+AndyAB.prototype.enrol = function(callback) {
   var cohort = this.getCookie(this.cookiePrefix + this.name)
   if (cohort == null) {
     cohort = this.sampleCohort();
@@ -49,20 +49,20 @@ ABTest.prototype.enrol = function(callback) {
   return this;
 }
 
-ABTest.prototype.getCohort = function() {
+AndyAB.prototype.getCohort = function() {
   return this.getCookie(this.cookiePrefix + this.name);
 }
 
-ABTest.prototype.setCookie = function(key, value) {
+AndyAB.prototype.setCookie = function(key, value) {
   document.cookie = key + '=' + value + ';expires=' + this.endTime;
 }
 
-ABTest.prototype.getCookie = function(key) {
+AndyAB.prototype.getCookie = function(key) {
   var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
   return keyValue ? keyValue[2] : null;
 }
 
-ABTest.prototype.ready = function(selector, callback) {
+AndyAB.prototype.ready = function(selector, callback) {
   this.listeners.push({
     selector: selector,
     callback: callback
@@ -70,12 +70,12 @@ ABTest.prototype.ready = function(selector, callback) {
   this.check();
 }
 
-ABTest.prototype.updateForCohort = function(cohort, selector, callback) {
+AndyAB.prototype.updateForCohort = function(cohort, selector, callback) {
   if (this.getCohort() == cohort)
     this.ready(selector, callback);
 }
 
-ABTest.prototype.check = function() {
+AndyAB.prototype.check = function() {
   var listenersLength = this.listeners.length, listener, elements;
   for (var i = 0; i < listenersLength; i++) {
     listener = this.listeners[i];
