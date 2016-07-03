@@ -16,6 +16,7 @@ var ABTest = function(name) {
   this.endTime = new Date();
   this.endTime.setDate(this.endTime.getDate() + 1);
   this.endTime = this.endTime.getTime();
+  this.cookiePrefix = "AB";
 }
 
 ABTest.prototype.withCohorts = function(cohorts) {
@@ -39,17 +40,17 @@ ABTest.prototype.sampleCohort = function() {
 }
 
 ABTest.prototype.enrol = function(callback) {
-  var cohort = this.getCookie("AB" + this.name)
+  var cohort = this.getCookie(this.cookiePrefix + this.name)
   if (cohort == null) {
     cohort = this.sampleCohort();
-    this.setCookie("AB" + this.name, cohort);
+    this.setCookie(this.cookiePrefix + this.name, cohort);
     typeof callback === 'function' && callback(cohort);
   }
   return this;
 }
 
 ABTest.prototype.getCohort = function() {
-  return this.getCookie("AB" + this.name);
+  return this.getCookie(this.cookiePrefix + this.name);
 }
 
 ABTest.prototype.setCookie = function(key, value) {
