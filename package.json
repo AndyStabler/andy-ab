@@ -1,0 +1,19 @@
+{
+  "name": "andy-ab",
+  "version": "1.0.0",
+  "description": "An javascript AB testing framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndyStabler/andy-ab.git"
+  },
+  "author": "Andy Stabler (sdolta@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndyStabler/andy-ab/issues"
+  },
+  "homepage": "https://github.com/AndyStabler/andy-ab#readme"
+}
