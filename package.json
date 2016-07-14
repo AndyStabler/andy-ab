@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/AndyStabler/andy-ab/issues"
   },
-  "homepage": "https://github.com/AndyStabler/andy-ab#readme"
+  "homepage": "https://github.com/AndyStabler/andy-ab#readme",
+  "devDependencies": {
+    "jshint": "latest",
+    "browserify": "latest"
+  }
 }
