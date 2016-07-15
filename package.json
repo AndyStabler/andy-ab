@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "echo '=> Linting' && jshint lib/"
+    "lint": "echo '=> Linting' && jshint lib/",
+    "browserify": "echo '=> Browserifying' && browserify lib/andy-ab.js -o build/andy-ab.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,7 @@
   },
   "homepage": "https://github.com/AndyStabler/andy-ab#readme",
   "devDependencies": {
-    "jshint": "latest",
-    "browserify": "latest"
+    "browserify": "^13.0.1",
+    "jshint": "latest"
   }
 }
