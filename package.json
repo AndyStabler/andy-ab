@@ -20,6 +20,6 @@
   "homepage": "https://github.com/AndyStabler/andy-ab#readme",
   "devDependencies": {
     "browserify": "^13.0.1",
-    "jshint": "latest"
+    "jshint": "^2.9.2"
   }
 }
