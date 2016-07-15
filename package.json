@@ -20,6 +20,7 @@
   "homepage": "https://github.com/AndyStabler/andy-ab#readme",
   "devDependencies": {
     "browserify": "^13.0.1",
-    "jshint": "^2.9.2"
+    "jshint": "^2.9.2",
+    "mocha": "^2.5.3"
   }
 }
