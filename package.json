@@ -4,7 +4,7 @@
   "description": "A javascript AB testing framework",
   "main": "lb/andy-ab.js",
   "scripts": {
-    "test": "echo 'Error: no test specified'",
+    "test": "echo '=> Testing - Error: no test specified'",
     "lint": "echo '=> Linting' && jshint lib/",
     "browserify": "echo '=> Browserifying' && browserify lib/andy-ab.js --standalone  AndyAB > build/andy-ab.js",
     "start": "http-server example",
