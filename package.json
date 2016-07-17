@@ -6,7 +6,12 @@
   "scripts": {
     "test": "echo 'Error: no test specified'",
     "lint": "echo '=> Linting' && jshint lib/",
-    "browserify": "echo '=> Browserifying' && browserify lib/andy-ab.js -o build/andy-ab.js"
+    "browserify": "echo '=> Browserifying' && browserify lib/andy-ab.js --standalone  AndyAB > build/andy-ab.js",
+    "start": "http-server example",
+    "build": "echo '=> Building' && npm run browserify -s && cp build/andy-ab.js example/assets/js/",
+    "prepublish": "npm run build",
+    "prebuild": "npm run test",
+    "pretest": "npm run lint"
   },
   "repository": {
     "type": "git",
