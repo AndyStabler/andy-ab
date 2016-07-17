@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <script src="/assets/js/andy-ab.js"></script>
+  <script>
+    var test = new AndyAB("My super awesome test")
+    .withCohorts(["control", "treatment"])
+    .endingAtTime(new Date("August 1, 2016 12:00:00"))
+    .enrol(function(cohort){
+      console.log("Enrolled into " + cohort + " cohort. Great!");
+      // Fire analytics events here
+    });
+
+    test.updateForCohort("treatment", "#price", function(element) {
+      element.innerHTML = "&pound;5";
+    });
+
+    test.updateForCohort("treatment", "#price-description", function(element) {
+      element.innerHTML = "It's cheap, but so are you!";
+    });
+
+  </script>
+  <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+</head>
+<body>
+  <h1 id="price">&pound;20</h1>
+  <p id="price-description">It's expensive, but so are you!</p>
+</body>
+</html>
