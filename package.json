@@ -2,7 +2,7 @@
   "name": "andy-ab",
   "version": "1.0.0",
   "description": "A javascript AB testing framework",
-  "main": "index.js",
+  "main": "lb/andy-ab.js",
   "scripts": {
     "test": "echo 'Error: no test specified'",
     "lint": "echo '=> Linting' && jshint lib/",
