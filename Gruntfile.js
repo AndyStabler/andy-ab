@@ -22,14 +22,12 @@ module.exports = function(grunt) {
         root: "example",
       }
     },
-    jasmine : {
-      src : 'build/**/*.js',
-      options : {
-        specs : 'spec/**/*.js'
+    jasmine: {
+      src: "./build/andy-ab.js",
+      options: {
+        specs: "spec/*Spec.js",
+        summary: true
       }
-    },
-    jasmine_node: {
-      all: "spec/*/**.js"
     },
     jshint: {
       all: [
@@ -60,26 +58,22 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("grunt-jasmine-node");
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks('grunt-http-server');
   grunt.loadNpmTasks("grunt-webpack");
 
-  grunt.registerTask("test", [
-    "jshint",
-    "jasmine_node"
-    ]);
-
   grunt.registerTask("build", [
+    "jshint",
     "clean",
     "webpack",
+    "jasmine",
     "uglify",
-    "copy"
+    "copy",
     ]);
 
   grunt.registerTask("default", [
-    "test",
     "build"
     ]);
 };
