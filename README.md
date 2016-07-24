@@ -5,15 +5,15 @@ Behold, an AB testing framework without any frills.
 ## How to use it
 ```html
 <head>
-  <script src="/assets/js/andyAb.js"></script>
+  <script src="/assets/js/andy-ab.min.js"></script>
   <script>
     var test = new AndyAB("My super awesome test")
-      .withCohorts(["control", "treatment"])
-      .endingAtTime(new Date("August 1, 2016 12:00:00"))
-      .enrol(function(cohort){
-        console.log("Enrolled into " + cohort + " cohort. Great!");
-        // Fire analytics events here
-      });
+    .withCohorts(["control", "treatment"])
+    .endingAtTime(new Date("August 1, 2016 12:00:00"))
+    .enrol(function(cohort){
+      console.log("Enrolled into " + cohort + " cohort. Great!");
+      // Fire analytics events here
+    });
 
     test.updateForCohort("treatment", "#price", function(element) {
       element.innerHTML = "&pound;5";
@@ -24,6 +24,7 @@ Behold, an AB testing framework without any frills.
     });
 
   </script>
+  <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
 <body>
   <h1 id="price">&pound;20</h1>
