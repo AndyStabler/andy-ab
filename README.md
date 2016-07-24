@@ -33,8 +33,13 @@ Behold, an AB testing framework without any frills.
 The first time this script is executed, the user will be enrolled into either the control or treatment cohort.
 When this happens a cookie is created that stores the cohort the user is in, so next time they load the page they'll still be in that cohort. `"Enrolled into " + cohort + " cohort. Great!"` will also be printed to the console in this case, since that's what we specified in the enrol callback. This would be a good place to fire off some analytics events.
 
-
-If you have `node` installed you can see an example in action by executing `npm run start`.
+## Try it out
+```
+brew install node
+npm install -g grunt-cli
+npm install
+grunt run http-server
+```
 
 ## How to maintain it
 
@@ -42,5 +47,5 @@ If you have `node` installed you can see an example in action by executing `npm 
 2. Create a branch `git checkout -b my-cool-branch`
 3. Run `npm install`
 4. Cut code ✨
-5. Check it works `npm run test`
+5. Build it and run the tests `grunt`
 6. Create a Pull Request
