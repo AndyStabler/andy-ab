@@ -22,13 +22,6 @@ module.exports = function(grunt) {
         root: "example",
       }
     },
-    jasmine: {
-      src: "./build/andy-ab.js",
-      options: {
-        specs: "spec/*Spec.js",
-        summary: true
-      }
-    },
     jshint: {
       all: [
       "Gruntfile.js",
@@ -59,7 +52,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks('grunt-http-server');
@@ -69,7 +61,6 @@ module.exports = function(grunt) {
     "jshint",
     "clean",
     "webpack",
-    "jasmine",
     "uglify",
     "copy",
     ]);
