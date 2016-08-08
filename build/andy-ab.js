@@ -62,7 +62,6 @@ var AndyAB =
 	  this.endTime.setDate(this.endTime.getDate() + 1);
 	  this.endTime = this.endTime.getTime();
 	  this.cookiePrefix = "AB";
-	  console.log("this is" + this);
 	  window.onload = this.releaseObservers.bind(this);
 	};
 
@@ -123,7 +122,6 @@ var AndyAB =
 	};
 
 	AndyAB.prototype.notifyAllObservers = function() {
-	  console.log("Notifying all observers");
 	  var observersLength = this.observers.length;
 	  for (var i = 0; i < observersLength; i++)
 	    this.observers[i].notify();
