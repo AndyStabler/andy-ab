@@ -7,22 +7,21 @@ Behold, an AB testing framework for static sites without any frills.
 <head>
   <script src="/assets/js/andy-ab.min.js"></script>
   <script>
-    var test = new AndyAB("My super awesome test")
+    var test = new AndyAB("example_test")
     .withCohorts(["control", "treatment"])
-    .endingAtTime(new Date("August 1, 2016 12:00:00"))
+    .endingAtTime(new Date("August 1, 2020 12:00:00"))
     .enrol(function(cohort){
       console.log("Enrolled into " + cohort + " cohort. Great!");
       // Fire analytics events here
     });
 
-    test.updateForCohort("treatment", "#price", function(element) {
+    test.addObserver("treatment", "#price", function(element) {
       element.innerHTML = "&pound;5";
     });
 
-    test.updateForCohort("treatment", "#price-description", function(element) {
+    test.addObserver("treatment", "#price-description", function(element) {
       element.innerHTML = "It's cheap, but so are you!";
     });
-
   </script>
   <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
