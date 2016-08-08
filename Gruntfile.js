@@ -29,6 +29,16 @@ module.exports = function(grunt) {
       "spec/*.js"
       ]
     },
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec',
+          quiet: false, // Optionally suppress output to standard out (defaults to false)
+          require: 'jsdom-global/register'
+        },
+        src: ['test/**/*.js']
+      }
+    },
     webpack: {
       options: webpackConfig,
       prod: {
@@ -55,10 +65,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks('grunt-http-server');
+  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks("grunt-webpack");
 
   grunt.registerTask("build", [
     "jshint",
+    "mochaTest",
     "clean",
     "webpack",
     "uglify",
