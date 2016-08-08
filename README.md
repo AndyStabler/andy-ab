@@ -39,7 +39,7 @@ When this happens a cookie is created that stores the cohort the user is in, so 
 brew install node
 npm install -g grunt-cli
 npm install
-grunt run http-server
+grunt http-server
 ```
 
 ## How to maintain it
