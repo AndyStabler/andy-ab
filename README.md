@@ -1,6 +1,6 @@
 # Andy AB
 
-Behold, an AB testing framework without any frills.
+Behold, an AB testing framework for static sites without any frills.
 
 ## How to use it
 ```html
