@@ -7,7 +7,7 @@ var expect = chai.expect;
 chai.use(sinonChai);
 
 var AndyAB = require("../lib/andy-ab.js");
-var Observer = require("../lib/observer.js");
+var Observer = require("../lib/document-observer.js");
 
 describe("AndyAB", function() {
   var ab;
@@ -96,15 +96,55 @@ describe("AndyAB", function() {
 
   describe("addObserver", function() {
     beforeEach(function() {
+      ab.withCohorts(["treatment", "control"]).enrol();
+    });
+
+    it("should call whenViewedBy when there are two arguments", function() {
+      var whenViewedBy = sinon.spy(ab, "whenViewedBy");
+      ab.addObserver(ab.getCohort(), function() {});
+      expect(whenViewedBy).to.have.been.executed;
+    });
+
+    it("should call addDocumentObserver when there are three arguments", function() {
+      var addDocumentObserver = sinon.spy(ab, "addDocumentObserver");
+      ab.addObserver(ab.getCohort(), "#price", function() {});
+      expect(addDocumentObserver).to.have.been.executed;
+    });
+  });
+
+  describe("whenViewedBy", function() {
+    beforeEach(function() {
+      ab.withCohorts(["treatment", "control"]).enrol();
+    });
+
+    describe("when the cohort matches", function() {
+      it("should execute the callback", function() {
+        var callback = sinon.spy();
+        ab.whenViewedBy(ab.getCohort(), callback);
+        expect(callback).to.have.been.called;
+      });
+    });
+
+    describe("when the cohort does not match", function() {
+      it("should not execute the callback", function() {
+        var callback = sinon.spy();
+        ab.whenViewedBy("not the right cohort", callback);
+        expect(callback).to.not.have.been.called;
+      });
+    })
+  });
+
+  describe("addDocumentObserver", function() {
+    beforeEach(function() {
         ab.withCohorts(["treatment", "control"]).enrol();
     });
 
     describe("when the cohort matches the enrolled cohort", function() {
       it("should add the observer to the observers array", function() {
-        var notifyAllObservers = sinon.spy(ab, "notifyAllObservers");
-        ab.addObserver(ab.getCohort(), "#cake", function() {});
-        expect(notifyAllObservers).to.have.been.called;
-        expect(ab.observers.length).to.equal(1);
+        var notifyAllDocumentObservers = sinon.spy(ab, "notifyAllDocumentObservers");
+        ab.addDocumentObserver(ab.getCohort(), "#cake", function() {});
+        expect(notifyAllDocumentObservers).to.have.been.called;
+        expect(ab.documentObservers.length).to.equal(1);
       });
     });
 
@@ -115,22 +155,22 @@ describe("AndyAB", function() {
         var otherCohort = ab.cohorts.filter(function(el) {
           return el !== cohort;
         })[0];
-        var notifyAllObservers = sinon.spy(ab, "notifyAllObservers");
-        ab.addObserver(otherCohort, "#cake", function() {});
-        expect(notifyAllObservers).not.to.have.been.called;
-        expect(ab.observers.length).to.equal(0);
+        var notifyAllDocumentObservers = sinon.spy(ab, "notifyAllDocumentObservers");
+        ab.addDocumentObserver(otherCohort, "#cake", function() {});
+        expect(notifyAllDocumentObservers).not.to.have.been.called;
+        expect(ab.documentObservers.length).to.equal(0);
       });
     });
   });
 
-  describe("notifyAllObservers", function() {
+  describe("notifyAllDocumentObservers", function() {
     it("should notify each observer", function() {
       var observers = [
         new Observer("#cake", function() {})
       ];
-      ab.observers = observers;
+      ab.documentObservers = observers;
       var notify = sinon.spy(observers[0], "notify");
-      ab.notifyAllObservers();
+      ab.notifyAllDocumentObservers();
       expect(notify).to.have.been.called;
     });
   });
