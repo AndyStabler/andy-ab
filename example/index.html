@@ -21,10 +21,11 @@
     });
 
     test.whenIn("treatment", function() {
-      console.log("treatment user viewed page");
+      // Fire analytics event to signal treatment page viewed.
+      // Or perform a redirect for users in a certain cohort
+      // e.g. document.location.href = "http://www.google.com";
     });
 
-    test.actionFor("treatment", function() { console.log("treatment person viewed page!") });
   </script>
 </head>
 <body>
