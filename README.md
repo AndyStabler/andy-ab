@@ -1,8 +1,10 @@
+# Hold tight! This is currently under development.
+
 # Andy AB
 
 Behold, an AB testing framework for static sites without any frills.
 
-## How to use it
+## Example
 ```html
 <head>
   <script src="/assets/js/andy-ab.min.js"></script>
@@ -30,8 +32,42 @@ Behold, an AB testing framework for static sites without any frills.
   <p id="price-description">It's expensive, but so are you!</p>
 </body>
 ```
-The first time this script is executed, the user will be enrolled into either the control or treatment cohort.
-When this happens a cookie is created that stores the cohort the user is in, so next time they load the page they'll still be in that cohort. `"Enrolled into " + cohort + " cohort. Great!"` will also be printed to the console in this case, since that's what we specified in the enrol callback. This would be a good place to fire off some analytics events.
+
+## FAQ
+
+### How many cohorts can I have?
+
+How many can you shake a stick at? (as many as you like).
+
+### Can I run redirect experiments?
+
+Sure can. Try this out:
+```javascript
+test.whenIn("treatment", function() {
+  document.location.href = "other_home_page";
+});
+```
+
+### In your example you're including JS in the HEAD section, isn't that bad?
+
+This _could_ slow down the time it takes your page to load. However, it was a conscious
+decision since it will prevent the page from flickering.
+
+This is because the testing framework listens to the DOM as it loads and executes
+callbacks before the elements are rendered on the page. This prevents a flicker
+occuring on the page when elements are updated. For example, say you were running an experiment where users in the control cohort saw a green button, and users in
+the treatment cohort saw a blue button. You'd say something like:
+
+```javascript
+test.whenIn("treatment", "#my-button", function(element) {
+  element.style.background="blue";
+});
+```
+
+If the script was at the _bottom_ of the page, then the green control button would
+be rendered first, _then_ the script would execute where the background colour would
+be set to blue. This would sometimes be noticable and potentially affect your experiment
+results.
 
 ## Try it out
 ```
