@@ -46,15 +46,15 @@ var AndyAB =
 /***/ function(module, exports, __webpack_require__) {
 
 	/*jshint: strict:true*/
-	var Observer = __webpack_require__(1);
+	var DocumentObserver = __webpack_require__(1);
 	var MutationObserver = __webpack_require__(2);
 
 	var AndyAB = function(name) {
 	  this.name = name || "";
 	  this.cohorts = [];
-	  this.observers = [];
-	  this.observer = new MutationObserver(this.notifyAllObservers.bind(this));
-	  this.observer.observe(window.document, {
+	  this.documentObservers = [];
+	  this.mutationObserver = new MutationObserver(this.notifyAllDocumentObservers.bind(this));
+	  this.mutationObserver.observe(window.document, {
 	    childList: true,
 	    subtree: true
 	  });
@@ -114,21 +114,50 @@ var AndyAB =
 	  return this.cookiePrefix + this.name;
 	};
 
-	AndyAB.prototype.addObserver = function(cohort, selector, callback) {
-	  if (this.getCohort() == cohort) {
-	    this.observers.push(new Observer(selector, callback));
-	    this.notifyAllObservers();
+	/**
+	 * Executes a callback when the cohort passed in matches the cohort the user
+	 * is enrolled into. If a selector is passed in, then the callback will be
+	 * executed when the DOM changes and a new matching HTML element is found.
+	 *
+	 * whenIn(cohort, [selector,] callback)
+	 *
+	 * e.g.
+	 * whenIn("treatment", function() { console.log("treatment viewed page"); });
+	 * whenIn("treatment", ".price", function(element) {
+	 *     element.innerHTML = "2 expensive 4 u";
+	 *   });
+	 */
+	AndyAB.prototype.whenIn = function() {
+	  if (arguments.length == 2) {
+	    return this.whenViewedBy.apply(this, arguments);
+	  } else if (arguments.length == 3) {
+	    return this.addDocumentObserver.apply(this, arguments);
 	  }
+	  return this;
 	};
 
-	AndyAB.prototype.notifyAllObservers = function() {
-	  var observersLength = this.observers.length;
+	AndyAB.prototype.whenViewedBy = function(cohort, callback) {
+	  if (this.getCohort() == cohort)
+	    callback();
+	  return this;
+	};
+
+	AndyAB.prototype.addDocumentObserver = function(cohort, selector, callback) {
+	  if (this.getCohort() == cohort) {
+	    this.documentObservers.push(new DocumentObserver(selector, callback));
+	    this.notifyAllDocumentObservers();
+	  }
+	  return this;
+	};
+
+	AndyAB.prototype.notifyAllDocumentObservers = function() {
+	  var observersLength = this.documentObservers.length;
 	  for (var i = 0; i < observersLength; i++)
-	    this.observers[i].notify();
+	    this.documentObservers[i].notify();
 	};
 
 	AndyAB.prototype.releaseObservers = function() {
-	  this.observer.disconnect();
+	  this.mutationObserver.disconnect();
 	};
 
 	module.exports = AndyAB;
@@ -138,12 +167,12 @@ var AndyAB =
 /* 1 */
 /***/ function(module, exports) {
 
-	var Observer = function(selector, callback) {
+	var DocumentObserver = function(selector, callback) {
 	  this.selector = selector;
 	  this.callback = callback;
 	};
 
-	Observer.prototype.notify = function() {
+	DocumentObserver.prototype.notify = function() {
 	  var elements = document.querySelectorAll(this.selector);
 	  var elementsLength = elements.length;
 	  for (var i = 0; i < elementsLength; i++) {
@@ -155,7 +184,7 @@ var AndyAB =
 	  }
 	};
 
-	module.exports = Observer;
+	module.exports = DocumentObserver;
 
 
 /***/ },
