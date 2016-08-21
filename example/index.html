@@ -2,6 +2,7 @@
 <html>
 <head>
   <script src="/assets/js/andy-ab.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/css/main.css">
   <script>
     var test = new AndyAB("example_test")
     .withCohorts(["control", "treatment"])
@@ -11,15 +12,20 @@
       // Fire analytics events here
     });
 
-    test.addObserver("treatment", "#price", function(element) {
+    test.whenIn("treatment", "#price", function(element) {
       element.innerHTML = "&pound;5";
     });
 
-    test.addObserver("treatment", "#price-description", function(element) {
+    test.whenIn("treatment", "#price-description", function(element) {
       element.innerHTML = "It's cheap, but so are you!";
     });
+
+    test.whenIn("treatment", function() {
+      console.log("treatment user viewed page");
+    });
+
+    test.actionFor("treatment", function() { console.log("treatment person viewed page!") });
   </script>
-  <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
 <body>
   <h1 id="price">&pound;20</h1>

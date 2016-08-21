@@ -94,20 +94,20 @@ describe("AndyAB", function() {
     });
   });
 
-  describe("addObserver", function() {
+  describe("whenIn", function() {
     beforeEach(function() {
       ab.withCohorts(["treatment", "control"]).enrol();
     });
 
     it("should call whenViewedBy when there are two arguments", function() {
       var whenViewedBy = sinon.spy(ab, "whenViewedBy");
-      ab.addObserver(ab.getCohort(), function() {});
+      ab.whenIn(ab.getCohort(), function() {});
       expect(whenViewedBy).to.have.been.executed;
     });
 
     it("should call addDocumentObserver when there are three arguments", function() {
       var addDocumentObserver = sinon.spy(ab, "addDocumentObserver");
-      ab.addObserver(ab.getCohort(), "#price", function() {});
+      ab.whenIn(ab.getCohort(), "#price", function() {});
       expect(addDocumentObserver).to.have.been.executed;
     });
   });
