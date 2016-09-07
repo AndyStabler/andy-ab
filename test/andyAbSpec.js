@@ -7,6 +7,7 @@ var expect = chai.expect;
 chai.use(sinonChai);
 
 var AndyAB = require("../lib/andy-ab.js");
+var Cookies = require("js-cookie");
 var Observer = require("../lib/document-observer.js");
 
 describe("AndyAB", function() {
@@ -47,7 +48,7 @@ describe("AndyAB", function() {
       });
 
       it("should not reset the cookie", function() {
-        var setCookie = sinon.spy(ab, "setCookie")
+        var setCookie = sinon.spy(Cookies, "set")
         ab.enrol();
         expect(setCookie).not.to.have.been.called;
       });
