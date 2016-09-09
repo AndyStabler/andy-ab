@@ -61,6 +61,10 @@ describe("AndyAB", function() {
     });
 
     describe("when not already enrolled ", function(){
+      beforeEach(function() {
+        Cookies.remove(ab.experimentCookie.name);
+      });
+
       it("should enrol the user into a cohort", function() {
         expect(ab.getCohort()).to.be.empty;
         ab.enrol();
