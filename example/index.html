@@ -6,7 +6,6 @@
   <script>
     var test = new AndyAB("example_test")
     .withCohorts(["control", "treatment"])
-    .endingAtTime(new Date("August 1, 2020 12:00:00"))
     .enrol(function(cohort){
       console.log("Enrolled into " + cohort + " cohort. Great!");
       // Fire analytics events here
