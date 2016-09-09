@@ -63,6 +63,13 @@ describe("ExperimentCookie", function() {
         cookie.setCohort("test1", "treatment");
         expect(cookie.getCohort("test1")).to.equal("treatment");
       });
+
+      it("should allow more than one experiment to be stored", function() {
+        cookie.setCohort("test1", "control");
+        cookie.setCohort("test2", "treatment");
+        expect(cookie.getCohort("test1")).to.equal("control");
+        expect(cookie.getCohort("test2")).to.equal("treatment");
+      });
     });
   });
 });
