@@ -79,26 +79,6 @@ describe("AndyAB", function() {
     });
   });
 
-  describe("getCohort", function() {
-
-  });
-
-  describe("cookieName", function() {
-    describe("when the cookie prefix is set", function() {
-      it("should include the prefix", function() {
-        ab.cookiePrefix = "prefix";
-        expect(ab.cookieName()).to.equal(ab.cookiePrefix + ab.name);
-      });
-    });
-
-    describe("when the cookie prefix is not set", function() {
-      it("should not include a prefix", function() {
-        ab.cookiePrefix = "";
-        expect(ab.cookieName()).to.equal(ab.name);
-      });
-    });
-  });
-
   describe("whenIn", function() {
     beforeEach(function() {
       ab.withCohorts(["treatment", "control"]).enrol();
