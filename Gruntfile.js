@@ -69,8 +69,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-webpack");
 
   grunt.registerTask("build", [
-    "jshint",
-    "mochaTest",
+    "test",
     "clean",
     "webpack",
     "uglify",
@@ -79,5 +78,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask("default", [
     "build"
+    ]);
+
+  grunt.registerTask("test", [
+    "jshint",
+    "mochaTest"
     ]);
 };
