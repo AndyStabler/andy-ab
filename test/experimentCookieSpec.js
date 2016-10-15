@@ -1,3 +1,6 @@
+/* jshint -W024 */
+/* jshint expr:true */
+
 var jsdom = require('jsdom');
 
 var chai = require("chai");
