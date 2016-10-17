@@ -7,15 +7,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     clean: {
-      src: ["build", "example/assets/js"]
-    },
-    copy: {
-      files: {
-        cwd: "./build",
-        src: "andy-ab.min.js",
-        dest: "example/assets/js",
-        expand: true
-      }
+      src: "build"
     },
     'http-server': {
       dev: {
@@ -77,7 +69,6 @@ module.exports = function(grunt) {
     "clean",
     "webpack",
     "uglify",
-    "copy",
     ]);
 
   grunt.registerTask("test", [
