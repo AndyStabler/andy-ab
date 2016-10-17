@@ -68,16 +68,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks("grunt-webpack");
 
+  grunt.registerTask("default", [
+    "build"
+    ]);
+
   grunt.registerTask("build", [
     "test",
     "clean",
     "webpack",
     "uglify",
     "copy",
-    ]);
-
-  grunt.registerTask("default", [
-    "build"
     ]);
 
   grunt.registerTask("test", [
