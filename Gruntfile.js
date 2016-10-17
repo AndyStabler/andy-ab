@@ -26,7 +26,7 @@ module.exports = function(grunt) {
       all: [
       "Gruntfile.js",
       "lib/*.js",
-      "spec/*.js"
+      "test/*.js"
       ]
     },
     mochaTest: {
@@ -68,16 +68,20 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks("grunt-webpack");
 
+  grunt.registerTask("default", [
+    "build"
+    ]);
+
   grunt.registerTask("build", [
-    "jshint",
-    "mochaTest",
+    "test",
     "clean",
     "webpack",
     "uglify",
     "copy",
     ]);
 
-  grunt.registerTask("default", [
-    "build"
+  grunt.registerTask("test", [
+    "jshint",
+    "mochaTest"
     ]);
 };

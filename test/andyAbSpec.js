@@ -1,3 +1,6 @@
+/* jshint -W024 */
+/* jshint expr:true */
+
 var jsdom = require('jsdom');
 
 var chai = require("chai");
@@ -48,7 +51,7 @@ describe("AndyAB", function() {
       });
 
       it("should not reset the cookie", function() {
-        var setCookie = sinon.spy(Cookies, "set")
+        var setCookie = sinon.spy(Cookies, "set");
         ab.enrol();
         expect(setCookie).not.to.have.been.called;
       });
@@ -116,7 +119,7 @@ describe("AndyAB", function() {
         ab.whenViewedBy("not the right cohort", callback);
         expect(callback).to.not.have.been.called;
       });
-    })
+    });
   });
 
   describe("addDocumentObserver", function() {
