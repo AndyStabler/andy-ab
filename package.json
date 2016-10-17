@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/AndyStabler/andy-ab.git"
   },
-  "author": "Andy Stabler (sdolta@gmail.com)",
+  "author": "Andy Stabler <sdolta@gmail.com> (http://andystabler.co.uk)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AndyStabler/andy-ab/issues"
