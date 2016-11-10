@@ -1,5 +1,7 @@
 # Hold tight! This is currently under development.
 
+(If you're keen you can get the latest beta version [here](https://unpkg.com/andy-ab/build/andy-ab.min.js))
+
 # Andy AB
 
 Behold, an AB testing framework for static sites without any frills.
