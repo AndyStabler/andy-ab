@@ -79,6 +79,54 @@ describe("AndyAB", function() {
         ab.enrol(callback);
         expect(callback).to.have.been.called;
       });
+
+      it("excludes the user when an exclusion condition is true", function() {
+        var exclusions = { "already subscribed" : function() { return true; }};
+        ab.withExclusions(exclusions);
+        ab.enrol();
+        expect(ab.getCohort()).to.equal("already subscribed");
+      });
+    });
+  });
+
+  describe("alreadyEnrolled", function() {
+    beforeEach(function() {
+      ab.withCohorts(["treatment", "control"]);
+    });
+
+    it("is true when the user is already enrolled", function() {
+      ab.enrol();
+      expect(ab.alreadyEnrolled()).to.be.true;
+    });
+
+    it("is false when the user is not already enrolled", function() {
+      Cookies.remove(ab.experimentCookie.name);
+      expect(ab.alreadyEnrolled()).to.be.false;
+    });
+  });
+
+  describe("exclusionCohort", function() {
+    beforeEach(function() {
+      ab.withCohorts(["treatment", "control"]);
+    });
+
+    it("is undefined when there are no exclusions", function() {
+      expect(ab.exclusionCohort()).to.be.undefined;
+    });
+
+    it("is undefined when there is not a valid exclusion", function() {
+      var exclusions = { "already subscribed" : function() { return false; }};
+      ab.withExclusions(exclusions);
+      expect(ab.exclusionCohort()).to.be.undefined;
+    });
+
+    it("is the first valid exclusion cohort", function() {
+      var exclusions = {
+        "already subscribed" : function() { return false; },
+        "in another campaign" : function() { return true; }
+      };
+      ab.withExclusions(exclusions);
+      expect(ab.exclusionCohort()).to.equal("in another campaign");
     });
   });
 
