@@ -25,6 +25,31 @@ describe("AndyAB", function() {
     document.cookie = ab.cookiePrefix + ab.name + '=' + "" + ';expires=' + new Date();
   });
 
+  describe("withCohorts", function() {
+    it("sets the cohorts array", function() {
+      var cohorts = ["control", "treatment"];
+      ab.withCohorts(cohorts);
+      expect(ab.cohorts).to.equal(cohorts);
+    });
+  });
+
+  describe("withExclusions", function() {
+    it("sets the exclusions object", function() {
+      var exclusions = { "exclusion1" : function() { return true; }};
+      ab.withExclusions(exclusions);
+      expect(ab.exclusions).to.equal(exclusions);
+    });
+  });
+
+  describe("withExclusion", function() {
+    it("adds the exclusion to the exclusions object", function() {
+      var exclusions = { "exclusion1" : function() { return true; }};
+      ab.withExclusions(exclusions);
+      ab.withExclusion("already subscribed", function() { return true; });
+      expect(ab.exclusions).to.not.have.property("already subscribed", function() { return true; });
+    });
+  });
+
   describe("sampleCohort", function() {
     it("should raise an error when the cohorts aren't set", function() {
       expect(ab.sampleCohort).to.throw();
