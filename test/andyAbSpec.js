@@ -46,7 +46,8 @@ describe("AndyAB", function() {
       var exclusions = { "exclusion1" : function() { return true; }};
       ab.withExclusions(exclusions);
       ab.withExclusion("already subscribed", function() { return true; });
-      expect(ab.exclusions).to.not.have.property("already subscribed", function() { return true; });
+      expect(ab.exclusions).to.have.property("exclusion1");
+      expect(ab.exclusions).to.have.property("already subscribed");
     });
   });
 
