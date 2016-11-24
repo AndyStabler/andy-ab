@@ -4,8 +4,12 @@
   <script src="https://unpkg.com/andy-ab/build/andy-ab.min.js"></script>
   <link rel="stylesheet" type="text/css" href="assets/css/main.css">
   <script>
-    var test = new AndyAB("example_test")
+    var test = new AndyAB("example test")
     .withCohorts(["control", "treatment"])
+    .withExclusion("already subscribed", function() {
+      // logic to decide if the user should be excluded
+      return true;
+    })
     .enrol(function(cohort){
       console.log("Enrolled into " + cohort + " cohort. Great!");
       // Fire analytics events here

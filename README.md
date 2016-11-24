@@ -11,8 +11,12 @@ Behold, an AB testing framework for static sites without any frills.
 <head>
   <script src="/assets/js/andy-ab.min.js"></script>
   <script>
-    var test = new AndyAB("example_test")
+    var test = new AndyAB("example test")
     .withCohorts(["control", "treatment"])
+    .withExclusion("already subscribed", function() {
+      // logic to decide if the user should be excluded
+      return true;
+    })
     .enrol(function(cohort){
       console.log("Enrolled into " + cohort + " cohort. Great!");
       // Fire analytics events here
