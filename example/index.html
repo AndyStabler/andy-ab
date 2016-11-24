@@ -8,7 +8,7 @@
     .withCohorts(["control", "treatment"])
     .withExclusion("already subscribed", function() {
       // logic to decide if the user should be excluded
-      return true;
+      return false;
     })
     .enrol(function(cohort){
       console.log("Enrolled into " + cohort + " cohort. Great!");
@@ -25,7 +25,6 @@
       // Or perform a redirect for users in a certain cohort
       // e.g. document.location.href = "http://www.google.com";
     });
-
   </script>
 </head>
 <body>

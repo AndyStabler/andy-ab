@@ -15,7 +15,7 @@ Behold, an AB testing framework for static sites without any frills.
     .withCohorts(["control", "treatment"])
     .withExclusion("already subscribed", function() {
       // logic to decide if the user should be excluded
-      return true;
+      return false;
     })
     .enrol(function(cohort){
       console.log("Enrolled into " + cohort + " cohort. Great!");
