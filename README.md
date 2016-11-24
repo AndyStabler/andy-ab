@@ -9,7 +9,7 @@ Behold, an AB testing framework for static sites without any frills.
 ## Example
 ```html
 <head>
-  <script src="/assets/js/andy-ab.min.js"></script>
+  <script src="https://unpkg.com/andy-ab/build/andy-ab.min.js"></script>
   <script>
     var test = new AndyAB("example test")
     .withCohorts(["control", "treatment"])
