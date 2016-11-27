@@ -53,6 +53,7 @@ var AndyAB =
 	var AndyAB = function(name) {
 	  this.name = name || "";
 	  this.cohorts = [];
+	  this.exclusions = {};
 	  this.documentObservers = [];
 	  this.mutationObserver = new MutationObserver(this.notifyAllDocumentObservers.bind(this));
 	  this.mutationObserver.observe(window.document, {
@@ -68,30 +69,46 @@ var AndyAB =
 	  return this;
 	};
 
-	AndyAB.prototype.sampleCohort = function() {
-	  if (this.cohorts.length === 0)
-	    throw "There are no cohorts to choose from";
-	  var max = this.cohorts.length - 1,
-	  min = 0,
-	  cohort = Math.floor(Math.random()*(max-min+1)+min);
+	AndyAB.prototype.withExclusions = function(exclusions) {
+	  this.exclusions = exclusions;
+	  return this;
+	};
 
-	  return this.cohorts[cohort];
+	AndyAB.prototype.withExclusion = function(cohort, condition) {
+	  this.exclusions[cohort] = condition;
+	  return this;
 	};
 
 	AndyAB.prototype.enrol = function(callback) {
-	  var cohort = this.getCohort();
-	  if (cohort)
+	  if (this.alreadyEnrolled())
 	    return this;
-	  cohort = this.sampleCohort();
+	  var cohort = this.exclusionCohort() || this.sampleCohort();
 	  this.experimentCookie.setCohort(this.name, cohort);
-	  if (typeof callback === 'function') {
+	  if (typeof callback === 'function')
 	    callback(cohort);
-	  }
 	  return this;
+	};
+
+	AndyAB.prototype.alreadyEnrolled = function() {
+	  return !!this.getCohort();
+	};
+
+	AndyAB.prototype.exclusionCohort = function() {
+	  return Object.keys(this.exclusions).find(function(exclusion) { return this.exclusions[exclusion](); }.bind(this));
 	};
 
 	AndyAB.prototype.getCohort = function() {
 	  return this.experimentCookie.getCohort(this.name);
+	};
+
+	AndyAB.prototype.sampleCohort = function() {
+	  if (this.cohorts.length === 0)
+	    throw "There are no cohorts to choose from";
+	  var max = this.cohorts.length - 1;
+	  var min = 0;
+	  var cohort = Math.floor(Math.random()*(max-min+1)+min);
+
+	  return this.cohorts[cohort];
 	};
 
 	/**
@@ -99,7 +116,7 @@ var AndyAB =
 	 * is enrolled into. If a selector is passed in, then the callback will be
 	 * executed when the DOM changes and a new matching HTML element is found.
 	 *
-	 * whenIn(cohort, [selector,] callback)
+	 * whenIn(cohort[, selector], callback)
 	 *
 	 * e.g.
 	 * whenIn("treatment", function() { console.log("treatment viewed page"); });
