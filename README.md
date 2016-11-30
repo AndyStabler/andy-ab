@@ -14,8 +14,8 @@ Behold, an AB testing framework for static sites without any frills.
     var test = new AndyAB("example test")
     .withCohorts(["control", "treatment"])
     .withExclusion("already subscribed", function() {
-      // logic to decide if the user should be excluded
-      return false;
+      var excluded = // logic to decide if the user should be excluded
+      return excluded;
     })
     .enrol(function(cohort){
       console.log("Enrolled into " + cohort + " cohort. Great!");
@@ -55,6 +55,31 @@ test.whenIn("treatment", function() {
   document.location.href = "other_home_page";
 });
 ```
+
+### Can I exclude some users from experiments?
+
+Yes!
+
+```javascript
+test.withExclusion("already subscribed", function() {
+  var excluded = // logic to decide if the user should be excluded
+  return excluded;
+})
+```
+
+or you can pass in an exclusions object if that's more your thing:
+
+```javascript
+var exclusions = {
+  "already subscribed": function() { ... },
+  "already visited site": function() { ... }
+};
+test.withExclusions(exclusions);
+```
+
+Now that the exclusions are set, the user will either be enrolled into the first
+exclusion cohort whose function returns `true`, or (if none of them return `true`) a random cohort
+from the cohorts array.
 
 ### In your example you're including JS in the HEAD section, isn't that bad?
 
