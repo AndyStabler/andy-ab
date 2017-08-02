@@ -6,6 +6,8 @@
 
 Behold, an AB testing framework for static sites without any frills.
 
+### See it in action **[here](https://andystabler.github.io/andy-ab/)**
+
 ## Example
 ```html
 <head>
