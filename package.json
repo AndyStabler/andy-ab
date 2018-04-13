@@ -14,10 +14,12 @@
   "homepage": "https://github.com/AndyStabler/andy-ab#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-http-server": "^2.0.0",
     "grunt-mocha-test": "^0.12.7",
@@ -41,7 +43,7 @@
   "dependencies": {
     "js-cookie": "^2.1.3",
     "mutation-observer": "^1.0.2"
-    },
+  },
   "keywords": [
     "experimentation",
     "multivariate",
