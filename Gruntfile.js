@@ -1,13 +1,9 @@
-module.exports = function(grunt) {
+const webpackConfig = require('./webpack.config.js');
 
-  "use strict";
-
-  var webpack = require("webpack");
-  var webpackConfig = require("./webpack.config.js");
-
+module.exports = function exports(grunt) {
   grunt.initConfig({
     clean: {
-      src: "build"
+      src: 'build',
     },
     eslint: {
       src: [
@@ -18,61 +14,61 @@ module.exports = function(grunt) {
     },
     'http-server': {
       dev: {
-        root: "example",
-      }
+        root: 'example',
+      },
     },
     mochaTest: {
       test: {
         options: {
           reporter: 'spec',
           quiet: false, // Optionally suppress output to standard out (defaults to false)
-          require: 'jsdom-global/register'
+          require: 'jsdom-global/register',
         },
-        src: ['test/**/*.js']
-      }
+        src: ['test/**/*.js'],
+      },
     },
     webpack: {
       options: webpackConfig,
       prod: {
-        cache: true
+        cache: true,
       },
       dev: {
-        cache: false
-      }
+        cache: false,
+      },
     },
     uglify: {
       compress: {
         files: {
-          "./build/andy-ab.min.js": "./build/andy-ab.js"
+          './build/andy-ab.min.js': './build/andy-ab.js',
         },
         options: {
-          mangle: true
-        }
-      }
-    }
+          mangle: true,
+        },
+      },
+    },
   });
 
-  grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("gruntify-eslint");
-  grunt.loadNpmTasks("grunt-contrib-uglify");
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('gruntify-eslint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-http-server');
   grunt.loadNpmTasks('grunt-mocha-test');
-  grunt.loadNpmTasks("grunt-webpack");
+  grunt.loadNpmTasks('grunt-webpack');
 
-  grunt.registerTask("default", [
-    "build"
-    ]);
+  grunt.registerTask('default', [
+    'build',
+  ]);
 
-  grunt.registerTask("build", [
-    "test",
-    "clean",
-    "webpack",
-    "uglify",
-    ]);
+  grunt.registerTask('build', [
+    'test',
+    'clean',
+    'webpack',
+    'uglify',
+  ]);
 
-  grunt.registerTask("test", [
+  grunt.registerTask('test', [
     'eslint',
-    "mochaTest"
-    ]);
+    'mochaTest',
+  ]);
 };
