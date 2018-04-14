@@ -14,13 +14,6 @@ module.exports = function(grunt) {
         root: "example",
       }
     },
-    jshint: {
-      all: [
-      "Gruntfile.js",
-      "lib/*.js",
-      "test/*.js"
-      ]
-    },
     mochaTest: {
       test: {
         options: {
@@ -54,7 +47,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks('grunt-http-server');
   grunt.loadNpmTasks('grunt-mocha-test');
@@ -72,7 +64,6 @@ module.exports = function(grunt) {
     ]);
 
   grunt.registerTask("test", [
-    "jshint",
     "mochaTest"
     ]);
 };

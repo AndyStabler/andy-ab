@@ -45,7 +45,6 @@ var AndyAB =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/*jshint: strict:true*/
 	var DocumentObserver = __webpack_require__(1);
 	var ExperimentCookie = __webpack_require__(2);
 	var MutationObserver = __webpack_require__(4);
