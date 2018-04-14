@@ -9,6 +9,9 @@ module.exports = function(grunt) {
     clean: {
       src: "build"
     },
+    eslint: {
+      src: ['lib/*.js']
+    },
     'http-server': {
       dev: {
         root: "example",
@@ -47,6 +50,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
+  grunt.loadNpmTasks("gruntify-eslint");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks('grunt-http-server');
   grunt.loadNpmTasks('grunt-mocha-test');
@@ -64,6 +68,7 @@ module.exports = function(grunt) {
     ]);
 
   grunt.registerTask("test", [
+    'eslint',
     "mochaTest"
     ]);
 };
