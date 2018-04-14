@@ -1,6 +1,4 @@
-/* jshint -W024 */
-/* jshint expr:true */
-
+require('jsdom-global')();
 var jsdom = require('jsdom');
 
 var chai = require("chai");

@@ -22,7 +22,6 @@ module.exports = function exports(grunt) {
         options: {
           reporter: 'spec',
           quiet: false, // Optionally suppress output to standard out (defaults to false)
-          require: 'jsdom-global/register',
         },
         src: ['test/**/*.js'],
       },
