@@ -96,7 +96,7 @@ describe('AndyAB', () => {
       });
 
       it('should enrol the user into a cohort', () => {
-        expect(ab.getCohort()).to.be.empty();
+        expect(ab.getCohort()).to.be.undefined();
         ab.enrol();
         expect(ab.getCohort()).to.be.ok();
       });
