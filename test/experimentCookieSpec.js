@@ -1,77 +1,76 @@
-/* jshint -W024 */
-/* jshint expr:true */
+require('jsdom');
 
-var jsdom = require('jsdom');
+const chai = require('chai');
+// dirty chai let's us say `.to.be.undefined()`, instead of `.to.be.undefined`,
+// which breaks eslint rules
+const dirtyChai = require('dirty-chai');
 
-var chai = require("chai");
-var sinon = require("sinon");
-var sinonChai = require("sinon-chai");
-var expect = chai.expect;
-chai.use(sinonChai);
+const { expect } = chai;
+chai.use(dirtyChai);
 
-var ExperimentCookie = require("../lib/experiment-cookie.js");
-var Cookies = require("js-cookie");
+const ExperimentCookie = require('../lib/experiment-cookie.js');
+const Cookies = require('js-cookie');
 
-describe("ExperimentCookie", function() {
-  var cookie;
+describe('ExperimentCookie', () => {
+  let cookie;
 
-  beforeEach(function() {
-    cookie = new ExperimentCookie("AndyAB");
+  beforeEach(() => {
+    cookie = new ExperimentCookie('AndyAB');
   });
 
-  afterEach(function() {
+  afterEach(() => {
     Cookies.remove(cookie.name);
   });
 
-  describe("getCohort", function() {
-    it("should return undefined when the cookie does not exist", function() {
-      var cohort = cookie.getCohort("test1");
-      expect(cohort).to.be.undefined;
+  describe('getCohort', () => {
+    it('should return undefined when the cookie does not exist', () => {
+      const cohort = cookie.getCohort('test1');
+      expect(cohort).to.be.undefined();
     });
 
-    describe("when the cookie exists", function() {
-      beforeEach(function() {
-        Cookies.set(cookie.name, "{}");
+    describe('when the cookie exists', () => {
+      beforeEach(() => {
+        Cookies.set(cookie.name, '{}');
       });
 
-      it("should return undefined when the experiment is not present", function() {
-        expect(cookie.getCohort("test1")).to.be.undefined;
+      it('should return undefined when the experiment is not present', () => {
+        expect(cookie.getCohort('test1')).to.be.undefined();
       });
 
-      it("should return the cohort", function() {
-        cookie.setCohort("test1", "control");
-        expect(cookie.getCohort("test1")).to.equal("control");
+      it('should return the cohort', () => {
+        cookie.setCohort('test1', 'control');
+        expect(cookie.getCohort('test1')).to.equal('control');
       });
     });
   });
 
-  describe("setCohort", function() {
-    it("should create and set the cookie when it does not exist", function() {
-      cookie.setCohort("test1", "control");
-      expect(cookie.getCohort("test1")).to.equal("control");
+  describe('setCohort', () => {
+    it('should create and set the cookie when it does not exist', () => {
+      cookie.setCohort('test1', 'control');
+      expect(cookie.getCohort('test1')).to.equal('control');
     });
 
-    describe("when the cookie exists", function() {
-      beforeEach(function() {
-        Cookies.set(cookie.name, "{}");
+    describe('when the cookie exists', () => {
+      beforeEach(() => {
+        Cookies.set(cookie.name, '{}');
       });
 
-      it("should overwrite the existing cohort when the experiment is present", function() {
-        cookie.setCohort("test1", "control");
-        cookie.setCohort("test1", "treatment");
-        expect(cookie.getCohort("test1")).to.equal("treatment");
+      it('should overwrite the existing cohort when the experiment is present', () => {
+        cookie.setCohort('test1', 'control');
+        cookie.setCohort('test1', 'treatment');
+        expect(cookie.getCohort('test1')).to.equal('treatment');
       });
 
-      it("should set the cohort", function() {
-        cookie.setCohort("test1", "treatment");
-        expect(cookie.getCohort("test1")).to.equal("treatment");
+      it('should set the cohort', () => {
+        cookie.setCohort('test1', 'treatment');
+        expect(cookie.getCohort('test1')).to.equal('treatment');
       });
 
-      it("should allow more than one experiment to be stored", function() {
-        cookie.setCohort("test1", "control");
-        cookie.setCohort("test2", "treatment");
-        expect(cookie.getCohort("test1")).to.equal("control");
-        expect(cookie.getCohort("test2")).to.equal("treatment");
+      it('should allow more than one experiment to be stored', () => {
+        cookie.setCohort('test1', 'control');
+        cookie.setCohort('test2', 'treatment');
+        expect(cookie.getCohort('test1')).to.equal('control');
+        expect(cookie.getCohort('test2')).to.equal('treatment');
       });
     });
   });

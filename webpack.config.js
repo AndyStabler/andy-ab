@@ -1,10 +1,12 @@
+const path = require('path');
+
 module.exports = {
-   entry: "./lib/andy-ab.js",
-   output: {
-     path: "./build",
-     externals: [{"window.AndyAB": "AndyAB"}],
-     filename: "andy-ab.js",
-     libraryTarget: "var",
-     library: "AndyAB"
-   }
+  mode: 'production',
+  entry: './lib/andy-ab.js',
+  output: {
+    path: path.resolve(__dirname, 'build'),
+    filename: 'andy-ab.js',
+    libraryTarget: 'var',
+    library: 'AndyAB',
+  },
 };

@@ -1,240 +1,238 @@
-/* jshint -W024 */
-/* jshint expr:true */
+require('jsdom-global')();
+require('jsdom');
 
-var jsdom = require('jsdom');
+const chai = require('chai');
+// dirty chai let's us say `.to.be.undefined()`, instead of `.to.be.undefined`,
+// which breaks eslint rules
+const dirtyChai = require('dirty-chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 
-var chai = require("chai");
-var sinon = require("sinon");
-var sinonChai = require("sinon-chai");
-var expect = chai.expect;
+const { expect } = chai;
 chai.use(sinonChai);
+chai.use(dirtyChai);
 
-var AndyAB = require("../lib/andy-ab.js");
-var Cookies = require("js-cookie");
-var Observer = require("../lib/document-observer.js");
+const AndyAB = require('../lib/andy-ab.js');
+const Cookies = require('js-cookie');
+const Observer = require('../lib/document-observer.js');
 
-describe("AndyAB", function() {
-  var ab;
+describe('AndyAB', () => {
+  let ab;
 
-  beforeEach(function() {
-    ab = new AndyAB("AndyAB");
+  beforeEach(() => {
+    ab = new AndyAB('AndyAB');
   });
 
-  afterEach(function() {
+  afterEach(() => {
     // delete the cohort cookie
-    document.cookie = ab.cookiePrefix + ab.name + '=' + "" + ';expires=' + new Date();
+    document.cookie = `${ab.cookiePrefix}${ab.name}=;expires=${new Date()}`;
   });
 
-  describe("withCohorts", function() {
-    it("sets the cohorts array", function() {
-      var cohorts = ["control", "treatment"];
+  describe('withCohorts', () => {
+    it('sets the cohorts array', () => {
+      const cohorts = ['control', 'treatment'];
       ab.withCohorts(cohorts);
       expect(ab.cohorts).to.equal(cohorts);
     });
   });
 
-  describe("withExclusions", function() {
-    it("sets the exclusions object", function() {
-      var exclusions = { "exclusion1" : function() { return true; }};
+  describe('withExclusions', () => {
+    it('sets the exclusions object', () => {
+      const exclusions = { exclusion1: () => true };
       ab.withExclusions(exclusions);
       expect(ab.exclusions).to.equal(exclusions);
     });
   });
 
-  describe("withExclusion", function() {
-    it("adds the exclusion to the exclusions object", function() {
-      var exclusions = { "exclusion1" : function() { return true; }};
+  describe('withExclusion', () => {
+    it('adds the exclusion to the exclusions object', () => {
+      const exclusions = { exclusion1: () => true };
       ab.withExclusions(exclusions);
-      ab.withExclusion("already subscribed", function() { return true; });
-      expect(ab.exclusions).to.have.property("exclusion1");
-      expect(ab.exclusions).to.have.property("already subscribed");
+      ab.withExclusion('already subscribed', () => true);
+      expect(ab.exclusions).to.have.property('exclusion1');
+      expect(ab.exclusions).to.have.property('already subscribed');
     });
   });
 
-  describe("sampleCohort", function() {
-    it("should raise an error when the cohorts aren't set", function() {
+  describe('sampleCohort', () => {
+    it("should raise an error when the cohorts aren't set", () => {
       expect(ab.sampleCohort).to.throw();
     });
 
-    it("should select a cohort", function() {
-      ab.withCohorts(["treatment", "control"]);
-      enrolledCohort = ab.sampleCohort();
-      expect(enrolledCohort).to.not.be.undefined;
+    it('should select a cohort', () => {
+      ab.withCohorts(['treatment', 'control']);
+      const enrolledCohort = ab.sampleCohort();
+      expect(enrolledCohort).to.not.be.undefined();
       expect(ab.cohorts).to.contain(enrolledCohort);
     });
   });
 
-  describe("enrol", function() {
-
-    beforeEach(function() {
-      ab.withCohorts(["treatment", "control"]);
+  describe('enrol', () => {
+    beforeEach(() => {
+      ab.withCohorts(['treatment', 'control']);
     });
 
-    describe("when already enrolled", function() {
-
-      beforeEach(function() {
+    describe('when already enrolled', () => {
+      beforeEach(() => {
         ab.enrol();
       });
 
-      it("should not reset the cookie", function() {
-        var setCookie = sinon.spy(Cookies, "set");
+      it('should not reset the cookie', () => {
+        const setCookie = sinon.spy(Cookies, 'set');
         ab.enrol();
-        expect(setCookie).not.to.have.been.called;
+        expect(setCookie).not.to.have.been.called();
       });
 
-      it("should not execute the enrol callback", function() {
-        var callback = sinon.spy();
+      it('should not execute the enrol callback', () => {
+        const callback = sinon.spy();
         ab.enrol(callback);
-        expect(callback).not.to.have.been.called;
+        expect(callback).not.to.have.been.called();
       });
     });
 
-    describe("when not already enrolled ", function(){
-      beforeEach(function() {
+    describe('when not already enrolled ', () => {
+      beforeEach(() => {
         Cookies.remove(ab.experimentCookie.name);
       });
 
-      it("should enrol the user into a cohort", function() {
-        expect(ab.getCohort()).to.be.empty;
+      it('should enrol the user into a cohort', () => {
+        expect(ab.getCohort()).to.be.undefined();
         ab.enrol();
-        expect(ab.getCohort()).to.be.ok;
+        expect(ab.getCohort()).to.be.ok();
       });
 
-      it("should execute the enrol callback", function() {
-        var callback = sinon.spy();
+      it('should execute the enrol callback', () => {
+        const callback = sinon.spy();
         ab.enrol(callback);
-        expect(callback).to.have.been.called;
+        expect(callback).to.have.been.called();
       });
 
-      it("excludes the user when an exclusion condition is true", function() {
-        var exclusions = { "already subscribed" : function() { return true; }};
+      it('excludes the user when an exclusion condition is true', () => {
+        const exclusions = { 'already subscribed': () => true };
         ab.withExclusions(exclusions);
         ab.enrol();
-        expect(ab.getCohort()).to.equal("already subscribed");
+        expect(ab.getCohort()).to.equal('already subscribed');
       });
     });
   });
 
-  describe("alreadyEnrolled", function() {
-    beforeEach(function() {
-      ab.withCohorts(["treatment", "control"]);
+  describe('alreadyEnrolled', () => {
+    beforeEach(() => {
+      ab.withCohorts(['treatment', 'control']);
     });
 
-    it("is true when the user is already enrolled", function() {
+    it('is true when the user is already enrolled', () => {
       ab.enrol();
-      expect(ab.alreadyEnrolled()).to.be.true;
+      expect(ab.alreadyEnrolled()).to.be.true();
     });
 
-    it("is false when the user is not already enrolled", function() {
+    it('is false when the user is not already enrolled', () => {
       Cookies.remove(ab.experimentCookie.name);
-      expect(ab.alreadyEnrolled()).to.be.false;
+      expect(ab.alreadyEnrolled()).to.be.false();
     });
   });
 
-  describe("exclusionCohort", function() {
-    beforeEach(function() {
-      ab.withCohorts(["treatment", "control"]);
+  describe('exclusionCohort', () => {
+    beforeEach(() => {
+      ab.withCohorts(['treatment', 'control']);
     });
 
-    it("is undefined when there are no exclusions", function() {
-      expect(ab.exclusionCohort()).to.be.undefined;
+    it('is undefined when there are no exclusions', () => {
+      expect(ab.exclusionCohort()).to.be.undefined();
     });
 
-    it("is undefined when there is not a valid exclusion", function() {
-      var exclusions = { "already subscribed" : function() { return false; }};
+    it('is undefined when there is not a valid exclusion', () => {
+      const exclusions = { 'already subscribed': () => false };
       ab.withExclusions(exclusions);
-      expect(ab.exclusionCohort()).to.be.undefined;
+      expect(ab.exclusionCohort()).to.be.undefined();
     });
 
-    it("is the first valid exclusion cohort", function() {
-      var exclusions = {
-        "already subscribed" : function() { return false; },
-        "in another campaign" : function() { return true; }
+    it('is the first valid exclusion cohort', () => {
+      const exclusions = {
+        'already subscribed': () => false,
+        'in another campaign': () => true,
       };
       ab.withExclusions(exclusions);
-      expect(ab.exclusionCohort()).to.equal("in another campaign");
+      expect(ab.exclusionCohort()).to.equal('in another campaign');
     });
   });
 
-  describe("whenIn", function() {
-    beforeEach(function() {
-      ab.withCohorts(["treatment", "control"]).enrol();
+  describe('whenIn', () => {
+    beforeEach(() => {
+      ab.withCohorts(['treatment', 'control']).enrol();
     });
 
-    it("should call whenViewedBy when there are two arguments", function() {
-      var whenViewedBy = sinon.spy(ab, "whenViewedBy");
-      ab.whenIn(ab.getCohort(), function() {});
-      expect(whenViewedBy).to.have.been.executed;
+    it('should call whenViewedBy when there are two arguments', () => {
+      const whenViewedBy = sinon.spy(ab, 'whenViewedBy');
+      ab.whenIn(ab.getCohort(), () => {});
+      expect(whenViewedBy).to.have.been.called();
     });
 
-    it("should call addDocumentObserver when there are three arguments", function() {
-      var addDocumentObserver = sinon.spy(ab, "addDocumentObserver");
-      ab.whenIn(ab.getCohort(), "#price", function() {});
-      expect(addDocumentObserver).to.have.been.executed;
+    it('should call addDocumentObserver when there are three arguments', () => {
+      const addDocumentObserver = sinon.spy(ab, 'addDocumentObserver');
+      ab.whenIn(ab.getCohort(), '#price', () => {});
+      expect(addDocumentObserver).to.have.been.called();
     });
   });
 
-  describe("whenViewedBy", function() {
-    beforeEach(function() {
-      ab.withCohorts(["treatment", "control"]).enrol();
+  describe('whenViewedBy', () => {
+    beforeEach(() => {
+      ab.withCohorts(['treatment', 'control']).enrol();
     });
 
-    describe("when the cohort matches", function() {
-      it("should execute the callback", function() {
-        var callback = sinon.spy();
+    describe('when the cohort matches', () => {
+      it('should execute the callback', () => {
+        const callback = sinon.spy();
         ab.whenViewedBy(ab.getCohort(), callback);
-        expect(callback).to.have.been.called;
+        expect(callback).to.have.been.called();
       });
     });
 
-    describe("when the cohort does not match", function() {
-      it("should not execute the callback", function() {
-        var callback = sinon.spy();
-        ab.whenViewedBy("not the right cohort", callback);
-        expect(callback).to.not.have.been.called;
+    describe('when the cohort does not match', () => {
+      it('should not execute the callback', () => {
+        const callback = sinon.spy();
+        ab.whenViewedBy('not the right cohort', callback);
+        expect(callback).to.not.have.been.called();
       });
     });
   });
 
-  describe("addDocumentObserver", function() {
-    beforeEach(function() {
-        ab.withCohorts(["treatment", "control"]).enrol();
+  describe('addDocumentObserver', () => {
+    beforeEach(() => {
+      ab.withCohorts(['treatment', 'control']).enrol();
     });
 
-    describe("when the cohort matches the enrolled cohort", function() {
-      it("should add the observer to the observers array", function() {
-        var notifyAllDocumentObservers = sinon.spy(ab, "notifyAllDocumentObservers");
-        ab.addDocumentObserver(ab.getCohort(), "#cake", function() {});
-        expect(notifyAllDocumentObservers).to.have.been.called;
+    describe('when the cohort matches the enrolled cohort', () => {
+      it('should add the observer to the observers array', () => {
+        const notifyAllDocumentObservers = sinon.spy(ab, 'notifyAllDocumentObservers');
+        ab.addDocumentObserver(ab.getCohort(), '#cake', () => {});
+        expect(notifyAllDocumentObservers).to.have.been.called();
         expect(ab.documentObservers.length).to.equal(1);
       });
     });
 
-    describe("when the cohort doesn't match the enrolled cohort", function() {
-      it("should not add an observer to the observers array", function() {
+    describe("when the cohort doesn't match the enrolled cohort", () => {
+      it('should not add an observer to the observers array', () => {
         ab.enrol();
-        var cohort = ab.getCohort();
-        var otherCohort = ab.cohorts.filter(function(el) {
-          return el !== cohort;
-        })[0];
-        var notifyAllDocumentObservers = sinon.spy(ab, "notifyAllDocumentObservers");
-        ab.addDocumentObserver(otherCohort, "#cake", function() {});
-        expect(notifyAllDocumentObservers).not.to.have.been.called;
+        const cohort = ab.getCohort();
+        const otherCohort = ab.cohorts.filter(el => el !== cohort)[0];
+        const notifyAllDocumentObservers = sinon.spy(ab, 'notifyAllDocumentObservers');
+        ab.addDocumentObserver(otherCohort, '#cake', () => {});
+        expect(notifyAllDocumentObservers).not.to.have.been.called();
         expect(ab.documentObservers.length).to.equal(0);
       });
     });
   });
 
-  describe("notifyAllDocumentObservers", function() {
-    it("should notify each observer", function() {
-      var observers = [
-        new Observer("#cake", function() {})
+  describe('notifyAllDocumentObservers', () => {
+    it('should notify each observer', () => {
+      const observers = [
+        new Observer('#cake', () => {}),
       ];
       ab.documentObservers = observers;
-      var notify = sinon.spy(observers[0], "notify");
+      const notify = sinon.spy(observers[0], 'notify');
       ab.notifyAllDocumentObservers();
-      expect(notify).to.have.been.called;
+      expect(notify).to.have.been.called();
     });
   });
-
 });
