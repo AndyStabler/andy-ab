@@ -31,8 +31,8 @@ describe('AndyAB', () => {
   describe('withCohorts', () => {
     it('sets the cohorts array', () => {
       const cohorts = ['control', 'treatment'];
-      ab.withCohorts(cohorts);
-      expect(ab.cohorts).to.equal(cohorts);
+      ab.withCohorts('control', 'treatment');
+      expect(ab.cohorts).to.eql(cohorts);
     });
   });
 
@@ -60,7 +60,7 @@ describe('AndyAB', () => {
     });
 
     it('should select a cohort', () => {
-      ab.withCohorts(['treatment', 'control']);
+      ab.withCohorts('treatment', 'control');
       const enrolledCohort = ab.sampleCohort();
       expect(enrolledCohort).to.not.be.undefined();
       expect(ab.cohorts).to.contain(enrolledCohort);
@@ -69,7 +69,7 @@ describe('AndyAB', () => {
 
   describe('enrol', () => {
     beforeEach(() => {
-      ab.withCohorts(['treatment', 'control']);
+      ab.withCohorts('treatment', 'control');
     });
 
     describe('when already enrolled', () => {
@@ -118,7 +118,7 @@ describe('AndyAB', () => {
 
   describe('alreadyEnrolled', () => {
     beforeEach(() => {
-      ab.withCohorts(['treatment', 'control']);
+      ab.withCohorts('treatment', 'control');
     });
 
     it('is true when the user is already enrolled', () => {
@@ -134,7 +134,7 @@ describe('AndyAB', () => {
 
   describe('exclusionCohort', () => {
     beforeEach(() => {
-      ab.withCohorts(['treatment', 'control']);
+      ab.withCohorts('treatment', 'control');
     });
 
     it('is undefined when there are no exclusions', () => {
@@ -159,7 +159,7 @@ describe('AndyAB', () => {
 
   describe('whenIn', () => {
     beforeEach(() => {
-      ab.withCohorts(['treatment', 'control']).enrol();
+      ab.withCohorts('treatment', 'control').enrol();
     });
 
     it('should call whenViewedBy when there are two arguments', () => {
@@ -177,7 +177,7 @@ describe('AndyAB', () => {
 
   describe('whenViewedBy', () => {
     beforeEach(() => {
-      ab.withCohorts(['treatment', 'control']).enrol();
+      ab.withCohorts('treatment', 'control').enrol();
     });
 
     describe('when the cohort matches', () => {
@@ -199,7 +199,7 @@ describe('AndyAB', () => {
 
   describe('addDocumentObserver', () => {
     beforeEach(() => {
-      ab.withCohorts(['treatment', 'control']).enrol();
+      ab.withCohorts('treatment', 'control').enrol();
     });
 
     describe('when the cohort matches the enrolled cohort', () => {
