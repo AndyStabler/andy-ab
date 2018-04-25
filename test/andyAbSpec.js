@@ -116,19 +116,19 @@ describe('AndyAB', () => {
     });
   });
 
-  describe('alreadyEnrolled', () => {
+  describe('enrolled', () => {
     beforeEach(() => {
       ab.withCohorts('treatment', 'control');
     });
 
     it('is true when the user is already enrolled', () => {
       ab.enrol();
-      expect(ab.alreadyEnrolled()).to.be.true();
+      expect(ab.enrolled()).to.be.true();
     });
 
     it('is false when the user is not already enrolled', () => {
       Cookies.remove(ab.experimentCookie.name);
-      expect(ab.alreadyEnrolled()).to.be.false();
+      expect(ab.enrolled()).to.be.false();
     });
   });
 
