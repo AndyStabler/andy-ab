@@ -132,6 +132,25 @@ describe('AndyAB', () => {
     });
   });
 
+  describe('assignCohort', () => {
+    beforeEach(() => {
+      ab.withCohorts('treatment', 'control');
+    });
+
+    it('assigns a cohort', () => {
+      const cohort = ab.assignCohort();
+      expect(['treatment', 'control']).to.include(cohort);
+      expect(ab.getCohort()).to.equal(cohort);
+    });
+
+    it('assigns an exclusion cohort when the user is excluded', () => {
+      ab.withExclusion('excluded', () => true);
+      const cohort = ab.assignCohort();
+      expect(cohort).to.equal('excluded');
+      expect(ab.getCohort()).to.equal(cohort);
+    });
+  });
+
   describe('exclusionCohort', () => {
     beforeEach(() => {
       ab.withCohorts('treatment', 'control');
